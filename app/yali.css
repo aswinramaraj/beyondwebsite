@@ -1,0 +1,26 @@
+/* =====================================================================
+   Yali, the pet, loose on every page (components/YaliPet.tsx, lib/yali/roam.ts).
+   It flies above the page content but is MULTIPLIED onto it, so on the white pages every glyph and edge shows through:
+   it reads as flying under the text and cards. While it bites or breathes fire it blends normally (clearly in front).
+   Layers: page < scorch/crumbs (99968) < shadow (99969) < Yali (99970) < Sirpi loader (99980) < site header (99990).
+   ===================================================================== */
+.yl-pet { position: fixed; left: 0; top: 0; z-index: 99970; width: clamp(220px, 17vw, 280px); aspect-ratio: 4 / 3; pointer-events: none; mix-blend-mode: multiply; will-change: transform; }
+.yl-pet.on-dark { mix-blend-mode: screen; } /* over sections marked data-yali-tone="dark" */
+.yl-pet.is-busy { mix-blend-mode: normal; }
+.yl-pet__flip { width: 100%; height: 100%; transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.1, 1); }
+.yl-shadow { position: fixed; left: 0; top: 0; z-index: 99969; width: 140px; height: 26px; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(8, 8, 8, 0.14), transparent); filter: blur(5px); mix-blend-mode: multiply; will-change: transform; }
+.yl-fx { position: absolute; left: 0; top: 0; width: 100%; height: 0; z-index: 99968; pointer-events: none; }
+.yl-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+.yl-crumb { position: absolute; border-radius: 2px; pointer-events: none; }
+.yl-scorch, .yl-ember { position: absolute; border-radius: 50%; pointer-events: none; }
+.yl-scorch { mix-blend-mode: multiply; filter: url(#yl-char);
+  background: radial-gradient(closest-side, rgba(14, 8, 5, 0.96) 0%, rgba(28, 13, 6, 0.92) 40%, rgba(66, 25, 8, 0.65) 63%, rgba(130, 48, 12, 0.28) 80%, transparent 100%);
+  animation: yl-scorch 2.9s ease-in forwards; }
+.yl-ember { mix-blend-mode: screen; filter: url(#yl-char) blur(1px);
+  background: radial-gradient(closest-side, transparent 55%, rgba(254, 74, 35, 0.85) 68%, rgba(255, 170, 60, 0.5) 76%, transparent 88%);
+  animation: yl-ember 2.6s ease-out forwards; }
+@keyframes yl-scorch { 0% { opacity: 0; scale: 0.35; } 12% { opacity: 1; scale: 1; } 72% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes yl-ember { 0% { opacity: 0; scale: 0.4; } 12% { opacity: 1; scale: 1; } 45% { opacity: 0.7; } 100% { opacity: 0; } }
+/* a bitten button: the mask (set by roam.ts) intersects one layer per tooth-hole */
+.yl-bitten { -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-composite: source-in; mask-composite: intersect; }

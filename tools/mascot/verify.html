@@ -1,0 +1,71 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>mascot verify</title>
+<style>html,body{margin:0;background:transparent}canvas{display:block}</style>
+<script type="importmap">{"imports":{"three":"/node_modules/three/build/three.module.js","three/addons/":"/node_modules/three/examples/jsm/"}}</script>
+</head><body>
+<canvas id="c"></canvas>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+
+const W = +new URLSearchParams(location.search).get('w') || 600, H = +new URLSearchParams(location.search).get('h') || 600;
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1); renderer.setSize(W, H, false); canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+renderer.setClearColor(0x000000, 0);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+const scene = new THREE.Scene();
+scene.add(new THREE.HemisphereLight(0xffffff, 0x8899bb, 1.1));
+const key = new THREE.DirectionalLight(0xffffff, 2.2); key.position.set(2, 4, 5); scene.add(key);
+const cam = new THREE.PerspectiveCamera(30, W / H, 0.1, 100);
+cam.position.set(0, 1.5, 9.5); cam.lookAt(0, 1.25, 0);
+
+const loader = new GLTFLoader(); loader.setMeshoptDecoder(MeshoptDecoder);
+window.__models = {};
+window.loadModel = async (key, url) => {
+  const gltf = await loader.loadAsync(url);
+  const root = gltf.scene; root.visible = false; scene.add(root);
+  const mixer = new THREE.AnimationMixer(root);
+  const clips = Object.fromEntries(gltf.animations.map((c) => [c.name, c]));
+  const meshes = []; const bones = [];
+  root.traverse((o) => { if (o.isMesh) meshes.push(o); if (o.isBone) bones.push(o.name); });
+  window.__models[key] = { gltf, root, mixer, clips, meshes };
+  return { clips: gltf.animations.map((c) => [c.name, +c.duration.toFixed(3), c.tracks.length]), meshes: meshes.map((m) => m.name + (m.isSkinnedMesh ? '*' : '')), bones: bones.length };
+};
+// pose the model: clip at time t (or rest pose when clip is null) and render a frame
+window.pose = (key, clip, t) => {
+  const m = window.__models[key];
+  for (const k in window.__models) window.__models[k].root.visible = (k === key);
+  m.mixer.stopAllAction();
+  if (clip) { const a = m.mixer.clipAction(m.clips[clip]); a.reset().play(); a.paused = false; m.mixer.setTime(0); m.mixer.update(t); }
+  else { m.root.traverse((o) => { if (o.isBone) { /* leave bind pose */ } }); }
+  m.root.updateMatrixWorld(true);
+  m.root.traverse((o) => { if (o.isSkinnedMesh) o.skeleton.update(); });
+  renderer.render(scene, cam);
+};
+// world-space size of every Fire_* mesh (skinned bounds) in the current pose
+window.fireSizes = (key) => {
+  const m = window.__models[key]; const out = {};
+  m.meshes.filter((x) => /^Fire_/.test(x.name)).forEach((x) => { const b = new THREE.Box3().setFromObject(x, true); const s = b.getSize(new THREE.Vector3()); out[x.name] = +Math.max(s.x, s.y, s.z).toFixed(4); });
+  return out;
+};
+window.bbox = (key) => { const b = new THREE.Box3().setFromObject(window.__models[key].root, true); return { min: b.min.toArray().map((v) => +v.toFixed(2)), max: b.max.toArray().map((v) => +v.toFixed(2)) }; };
+// union of the world-space bounds over every clip (sampled every `step` s) – used to frame the camera so nothing is cropped
+window.unionBounds = (key, step = 0.1, yaw = 0) => {
+  const m = window.__models[key]; const res = {}; const all = new THREE.Box3(); m.root.rotation.y = yaw;
+  for (const name of Object.keys(m.clips)) {
+    const b = new THREE.Box3();
+    for (let t = 0; t <= m.clips[name].duration + 1e-6; t += step) {
+      m.mixer.stopAllAction(); const a = m.mixer.clipAction(m.clips[name]); a.reset().play(); m.mixer.setTime(0); m.mixer.update(Math.min(t, m.clips[name].duration));
+      m.root.updateMatrixWorld(true); m.root.traverse((o) => { if (o.isSkinnedMesh) o.skeleton.update(); });
+      b.union(new THREE.Box3().setFromObject(m.root, true));
+    }
+    res[name] = [b.min.toArray().map((v) => +v.toFixed(2)), b.max.toArray().map((v) => +v.toFixed(2))]; all.union(b);
+  }
+  res.ALL = [all.min.toArray().map((v) => +v.toFixed(2)), all.max.toArray().map((v) => +v.toFixed(2))];
+  return res;
+};
+window.setCam = (px, py, pz, ly, fov) => { cam.position.set(px, py, pz); cam.lookAt(0, ly, 0); if (fov) { cam.fov = fov; cam.updateProjectionMatrix(); } };
+window.__ready = true;
+</script></body></html>

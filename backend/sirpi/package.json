@@ -1,0 +1,19 @@
+{
+  "name": "sirpi-backend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Backend for the Sirpi Stupid Problem Prize: Google sign-in, problems, votes, stored in Firebase Firestore.",
+  "type": "module",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env server.mjs",
+    "dev": "node --watch --env-file-if-exists=.env server.mjs",
+    "test": "node --test test/*.test.mjs",
+    "check": "node --env-file-if-exists=.env scripts/check-firestore.mjs"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.10.0"
+  }
+}

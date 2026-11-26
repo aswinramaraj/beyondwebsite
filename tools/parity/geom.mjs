@@ -1,0 +1,10 @@
+import { chromium } from 'playwright-core';
+const url = process.argv[2]; const W = +process.argv[3] || 1440;
+const b = await chromium.launch({ executablePath: '/usr/bin/google-chrome', headless: true, args: ['--no-sandbox'] });
+const p = await (await b.newContext({ viewport: { width: W, height: 900 } })).newPage();
+await p.goto(url, { waitUntil: 'load' }); await p.waitForTimeout(6500);
+const sels = ['.nav-new', '.hero-tag-wrap', '.heading-hero', '.showreal-home', '.hero-paralax.set-1.hide-mob', '.hero-paralax.set-2', '.hero-paralax.set-3', '.hero-paralax.set-4.hide-mob', '.hero-paralax.set-5', '.hero-paralax.set-6.hide-mob', '.hero-paralax.set-7.hide-mob', '.section.hero.home', '.section.bg-dark.cards', '.anim-heading-home', '.stats-card-wrapper.img-list-set-1', '.stats-card-wrapper.set-3', '.stats-card-wrapper.set-2', '.stats-card-wrapper.set-4', '.case--new-heading-wrap', '.height-cases', '.cases-cards-left-item.first', '.section.is-cases', '.section-name', '.service-card.set-1', '.service-card.set-4', '.service-card.set-2', '.service-card.set-5', '.section.is-clients', '.big-brand-card', '.startup-list-item', '.section.is-awwards', '.section.is-blog', '.featured-img-wrap', '.section.is-faq', '.faq-dropdown', '.section.is-cta', '.cta-card-wrapper', '.cta-heading', '.cta-left', '.cta-right', '.cta-btn-wrap', '.footer', '.email-link', '.contact-book-a-call'];
+const out = await p.evaluate((sels) => sels.map((s) => { const e = document.querySelector(s); if (!e) return s + ' —'; const r = e.getBoundingClientRect(); return `${s.padEnd(34)} x=${String(Math.round(r.left)).padStart(5)} y=${String(Math.round(r.top + scrollY)).padStart(6)} w=${String(Math.round(r.width)).padStart(5)} h=${String(Math.round(r.height)).padStart(5)}`; }), sels);
+console.log(out.join('\n'));
+console.log('docHeight', await p.evaluate(() => document.documentElement.scrollHeight));
+await b.close();

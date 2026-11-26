@@ -1,0 +1,120 @@
+/* =====================================================================
+   LIGHT THEME — white pages, near-black text, orange accent.
+   Loaded after site.css. To go back to the original dark look, remove `import './light.css'` from app/layout.tsx
+   (and change the sections' section-color="white" back to "black").
+   Palette: page #fff · surface #f5f5f5 · raised #fff · ink #080808 · muted #737373 · line rgba(8,8,8,.1) · accent #fe4a23
+   ===================================================================== */
+
+html, body { background-color: #fff; color: #080808; }
+.page-wrapper, .page-wrapper.dark { background-color: #fff; }
+.page-wrapper > img.light { display: none !important; } /* the hero's white light-beam picture only works on black */
+
+/* ── section backgrounds ── */
+.section.hero, .section.is-cases, .section.is-cases-new, .section.is-blog, .section.is-faq,
+.section.is-cta, .section.bg-dark, .section.bg-dark.cards, .case--new-heading-wrap, .bg-style { background-color: #fff; }
+.footer { background-color: #f5f5f5; }
+.footer-bot { border-top-color: rgba(8, 8, 8, 0.1); }
+
+/* ── edge fades and glows: fade to white instead of black ── */
+.shadow { background-image: linear-gradient(110deg, #fff0, #fff 50%, #fff); }
+.shadow.vertical { background-image: linear-gradient(#fff0, #fffffffc 43%, #fff); }
+.shadow.vertical.small, .shadow.vertical.small-2 { background-image: linear-gradient(#fff0, #fff 43%, #fff); }
+.shadow.vertical._2 { background-image: linear-gradient(#fff0, #fff 50%, #fff); }
+.shadow.hide-mob._2 { background-image: linear-gradient(110deg, #fff0, #ffffffad 41%, #fff 67%, #fff); }
+.left-stat-gradient { background-image: linear-gradient(-270deg, #fff 40.7%, #fff0 100%) !important; }
+.right-stat-gradient { background-image: linear-gradient(270deg, #fff 40.7%, #fff0 100%) !important; }
+.top-gradient { background-image: linear-gradient(#fff 19%, #fffc 58%, #fff0) !important; }
+.top-gradient-copy { background-image: linear-gradient(#fff0, #fffc 42%, #fff 81%) !important; }
+[class*="stats-card-gradient"] { background-image: radial-gradient(circle, rgba(254, 74, 35, 0.1), rgba(255, 255, 255, 0) 62%) !important; }
+.blur-wrap { display: none; }
+
+/* the thin vertical line under the Focus heading: a dark line that fades out at both ends (on black it was a white glow) */
+.verticle-line { width: 2px; }
+.stats-card-gradient.services.line { background-image: radial-gradient(circle, rgba(8, 8, 8, 0.92) 0%, rgba(8, 8, 8, 0.55) 30%, rgba(8, 8, 8, 0) 62%) !important; }
+
+/* ── text ── */
+.heading-hero, .char, .tag-text, .bl-pill-txt, .heading-2, .heading-3, .heading-5, .section-name, .card-hero-heading, .bl-unit,
+.case-heading, .bl-steps-title, .cases-cards-left-item-heading, .serv-sub.second, .service-card-title,
+.haeding-blog, .faq-question-label.label_faq_dev, .cta-heading, .text-color-white, .footer-nav-link.white,
+.footer-main-link, .email-link, .hero-heading { color: #080808; }
+#results .char, #results h2, h2.heading-2, h3.heading-3.text-color-white, .heading-2.text-align-center.max-w-55, .b1.serv-sub.second { color: #080808 !important; }
+.footer-nav-link.hover { color: #080808; }
+.copy { color: #737373; }
+
+/* ── pills, tags, widgets ── */
+.hero-tag, .hero-tag-wrap .hero-tag { background-image: none !important; background-color: #f3f3f3 !important; }
+.bl-pill { background-image: none !important; background-color: #fff !important; box-shadow: 0 0 0 1px rgba(8, 8, 8, 0.08) inset, 0 0.6rem 1.8rem rgba(8, 8, 8, 0.12) !important; }
+.bl-widget { background: #f1f1f1; box-shadow: 0 0.6rem 2rem rgba(8, 8, 8, 0.14), 0 0 0 1px rgba(8, 8, 8, 0.06); }
+.bl-chip { box-shadow: 0 0 0 1px rgba(8, 8, 8, 0.08) !important; }
+.hero-paralax.set-5 { filter: invert(1); } /* the white scribble arrow */
+
+/* ── cards ── */
+.stats-card { background-color: #fafafa; border-color: rgba(8, 8, 8, 0.1); }
+.cards-cases-right { background-color: #f5f5f5 !important; }
+.rotate-card-2 { background-color: #fff; box-shadow: 0 0.8rem 2.2rem rgba(8, 8, 8, 0.1), 0 0 0 1px rgba(8, 8, 8, 0.06); }
+div.service-card, div.service-card[class*="set-"] { background-color: #f5f5f5; box-shadow: 0 0 0 1px rgba(8, 8, 8, 0.06) inset; }
+.service-card::before { background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(254, 74, 35, 0.07), transparent 20%); }
+.service-card::after { background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(8, 8, 8, 0.05), transparent 20%); }
+.bl-card-art { box-shadow: 0 1.2rem 2.4rem rgba(8, 8, 8, 0.16), 0 0 0 1px rgba(8, 8, 8, 0.06) !important; }
+.feature-img, .blog-news-home-img { background-color: #f0f0f0; }
+.lap-top-bg { background-color: #080808; } /* the laptop frame stays dark: it is a device */
+
+/* ── buttons ── */
+.nav_link-c.contact.grey, .nav_link-cta.violet { background-color: #e5e5e5; }
+.nav_link-c.contact.grey .btn-text, .nav_link-cta.violet .btn-text { color: #080808; }
+.is-blog .btn-text-secondary, .is-blog .btn-text-secondary.first-txt, .is-blog .btn-text-secondary.second-txt { color: #080808; }
+.btn-icon-wrap { border-color: rgba(8, 8, 8, 0.14); }
+
+.section.is-cases-new .case-mob-home-img-block { background-color: #f5f5f5; }
+.section.is-cases-new .card-case-bot-item-heading { color: #080808; }
+
+/* ── FAQ ── */
+.faq-dropdown.dark { border-bottom-color: rgba(8, 8, 8, 0.14); }
+.line-1, .line-2 { background-color: #080808; }
+
+/* ── CTA + demo form ── */
+.cta-card { background-color: #f5f5f5; background-image: none; border: 1px solid rgba(8, 8, 8, 0.1); }
+.bl-demo-form { background-color: rgba(255, 255, 255, 0.9); border-color: rgba(8, 8, 8, 0.12); box-shadow: 0 1rem 3rem rgba(8, 8, 8, 0.08); }
+.bl-demo-form input[type='text'], .bl-demo-form input[type='email'], .bl-demo-form input[type='tel'], .bl-demo-form select, .bl-demo-form textarea { background: #fff; color: #080808; border-color: rgba(8, 8, 8, 0.16); }
+.bl-demo-form input:focus, .bl-demo-form select:focus, .bl-demo-form textarea:focus { background: #fff; border-color: #774dff; }
+.bl-consent { color: #525252; }
+.bl-demo-form option { color: #080808; background-color: #fff; }
+.bl-demo-form input::placeholder, .bl-demo-form textarea::placeholder { color: #8a8a8a; }
+.bl-demo-form span, .bl-demo-form label { color: #525252; }
+
+/* ── footer ── */
+.social-footer { background-color: #e8e8e8; border-color: rgba(8, 8, 8, 0.1); }
+.icon-footer { filter: invert(1); }
+
+/* ── cookie notice ── */
+.fs-cc-banner_component { background-image: linear-gradient(171deg, #d8d8d8, #fff 64%); box-shadow: 0 1rem 3rem rgba(8, 8, 8, 0.18); }
+.fs-cc-banner-content { background-color: #fff; }
+.fs-cc-banner_text { color: #525252; }
+.bl-cookie-link { color: #080808; }
+
+/* ── top header: no background, only the logo and links; text colours follow what is behind the bar (data-tone, set by SiteHeader) ── */
+.bl-top-link-a { color: #525252; }
+.bl-top-link-b, .bl-top[data-tone="light"] .bl-top-link[aria-current="page"] .bl-top-link-a { color: #080808; }
+.bl-top[data-tone="dark"] .bl-top-logo-img.is-light { opacity: 0; }
+.bl-top[data-tone="dark"] .bl-top-logo-img.is-dark { opacity: 1; }
+.bl-top[data-tone="dark"] .bl-top-link-a { color: rgba(255, 255, 255, 0.76); }
+.bl-top[data-tone="dark"] .bl-top-link-b, .bl-top[data-tone="dark"] .bl-top-link[aria-current="page"] .bl-top-link-a { color: #fff; }
+.bl-top-link-a, .bl-top-link-b { transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1), color 0.3s ease; }
+.bl-top-menu { background: #fff; box-shadow: 0 0 0 1px rgba(8, 8, 8, 0.08), 0 calc(var(--r) * 0.6) calc(var(--r) * 1.8) rgba(8, 8, 8, 0.1); }
+.bl-top-menu-link { color: #080808; border-bottom-color: rgba(8, 8, 8, 0.1); }
+.bl-burger span { background: #080808; transition: transform 0.3s, background-color 0.3s; }
+.bl-top[data-tone="dark"]:not([data-open="true"]) .bl-burger span { background: #fff; }
+
+/* ── bottom dock (its colours switch by section; with a white page it is always the light variant) ── */
+.bl-dock .nav-new { box-shadow: 0 calc(var(--r) * 0.8) calc(var(--r) * 2.2) rgba(8, 8, 8, 0.16), 0 0 0 1px rgba(8, 8, 8, 0.08); }
+.bl-dock .footer-nav-link.nav { color: #737373; }
+
+
+/* ── placeholder pages ── */
+.bl-ph-main { color: #080808; }
+.bl-ph-title { color: #080808; }
+.bl-ph-lead { color: #525252; }
+.bl-ph-soon { background: #f0f0f0; color: #404040; }
+.bl-ph-back { color: #737373; }
+.bl-ph-back:hover { color: #080808; }
+
